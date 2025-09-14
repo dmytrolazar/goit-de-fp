@@ -1,6 +1,4 @@
 from airflow import DAG
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.utils.trigger_rule import TriggerRule as tr
 from datetime import datetime
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
@@ -12,34 +10,34 @@ default_args = {
 }
 
 dag = DAG(
-    'jane_de_fp_02',
+    'Dmytro_de_fp_02',
     default_args=default_args,
     schedule_interval=None,
     catchup=False,
-    tags=["jane"]
+    tags=["Dmytro"]
 )
 
 landing_to_bronze = SparkSubmitOperator(
-    application='dags/jane/landing_to_bronze.py',
+    application='dags/dl_landing_to_bronze.py',
     task_id='landing_to_bronze',
     conn_id='spark-default',
-    verbose=1,
+    verbose=True,
     dag=dag,
 )
 
 bronze_to_silver = SparkSubmitOperator(
-    application='dags/jane/bronze_to_silver.py',
+    application='dags/dl_bronze_to_silver.py',
     task_id='bronze_to_silver',
     conn_id='spark-default',
-    verbose=1,
+    verbose=True,
     dag=dag,
 )
 
 silver_to_gold = SparkSubmitOperator(
-    application='dags/jane/silver_to_gold.py',
+    application='dags/dl_silver_to_gold.py',
     task_id='silver_to_gold',
     conn_id='spark-default',
-    verbose=1,
+    verbose=True,
     dag=dag,
 )
 
